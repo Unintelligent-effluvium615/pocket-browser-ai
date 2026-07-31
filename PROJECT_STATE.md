@@ -27,11 +27,15 @@
 - Responsividade verificada em 1920×1080, 1366×768 e viewport estreito (~500px).
   Em 1366×768 a área operacional inteira cabe sem rolagem; só o rodapé fica
   abaixo da dobra, o que o padrão da raiz permite para conteúdo explicativo.
-- Mídia real capturada: `docs/images/pocket-browser-ai-overview.png` (960×1040)
-  e `docs/images/demo.gif` (760×728, 221 quadros, 415 KB), ambas de execução
-  real e sem edição de conteúdo.
+- Mídia real capturada, cada peça com um papel próprio:
+  - `docs/images/pocket-browser-ai-overview.png` — 944×552, 44 KB. A tela de
+    abertura, capturada na **origem publicada**, onde não havia modelo em cache,
+    para que a mensagem de primeira visita fosse a real.
+  - `docs/images/demo.gif` — 760×855, 220 quadros, 480 KB. A conversa, gravada
+    sobre a altura inteira do viewport para não cortar campo nem rodapé.
+  - Ambas de execução real, sem edição de conteúdo.
 - Publicação verificada: repositório público, Pages verde, URL respondendo HTTP
-  200 e os três arquivos servidos com content-type correto.
+  200, os três arquivos e as duas mídias servidos com content-type correto.
 
 ## Não validado ainda
 
@@ -71,6 +75,19 @@ npx serve .
 ## Decisões abertas
 
 - Nenhuma. Nome, escopo e abordagem sem build foram aprovados em 31/07/2026.
+
+## Como capturar mídia deste projeto
+
+Registrado porque duas tentativas foram perdidas por erro de enquadramento.
+
+1. Zere o zoom com `Ctrl+0` antes de aplicar passos de zoom; ele é por origem e
+   acumula entre sessões.
+2. Use `F11` e espere o aviso de tela cheia do Chrome desaparecer.
+3. Grave **a altura inteira** do viewport. Com 125% de zoom em 1920×1080, a
+   coluna do produto ocupa `x` de 480 a 1440; a tela de conversa termina perto de
+   `y=1055`, então regiões mais curtas cortam campo de perguntas e rodapé.
+4. Recorte depois da gravação, nunca durante — regravar custa um novo ciclo de
+   carregamento do modelo.
 
 ## Não refazer
 
