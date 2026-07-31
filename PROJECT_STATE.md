@@ -51,9 +51,12 @@ npx serve .
 
 - Entrega: publicação completa em 31/07/2026 — aplicação, documentação bilíngue,
   mídia real, repositório público e GitHub Pages verde.
-- Correções de acabamento aplicadas após inspeção visual: estado vazio passou a
-  acompanhar o modelo carregado, texto vazio centralizado e negrito de markdown
+- Correções de acabamento aplicadas após inspeção visual: negrito de markdown
   renderizado sem parser e sem `innerHTML`.
+- Reestruturado em duas telas por decisão de Claudney em 31/07/2026: abertura com
+  explicação e botão único `Iniciar`, e conversa com barra compacta. Remover o
+  modelo volta à abertura e apaga o histórico. Isso eliminou o vazio vertical que
+  existia quando painel do modelo e chat vazio dividiam a mesma tela.
 
 ## Próximo passo recomendado
 
