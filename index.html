@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IA de Bolso — um LLM dentro da sua aba</title>
+    <meta
+      name="description"
+      content="Exemplo mínimo e funcional de um LLM rodando inteiramente no navegador com WebLLM e WebGPU. Sem servidor, sem conta, sem build."
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🧠</text></svg>"
+    />
+  </head>
+  <body>
+    <main class="app">
+      <header class="head">
+        <h1>IA de Bolso</h1>
+        <p class="tagline">
+          Um modelo de linguagem inteiro rodando dentro desta aba. Sem servidor,
+          sem conta, sem etapa de build — três arquivos estáticos.
+        </p>
+      </header>
+
+      <section class="model" aria-labelledby="model-heading">
+        <div class="model-id">
+          <span class="dot" id="dot" data-state="checking"></span>
+          <div>
+            <strong id="model-heading">Qwen2.5 0.5B Instruct</strong>
+            <p class="status" id="status" role="status" aria-live="polite">
+              Verificando suporte do navegador…
+            </p>
+          </div>
+        </div>
+
+        <div class="progress" id="progress" hidden>
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="model-actions">
+          <button type="button" id="load" disabled>Carregar modelo</button>
+          <button type="button" id="remove" class="danger" hidden>
+            Remover modelo
+          </button>
+        </div>
+      </section>
+
+      <section class="log" id="log" aria-live="polite" aria-label="Conversa">
+        <p class="empty" id="empty">
+          Carregue o modelo para começar. O download acontece uma única vez e
+          fica no cache deste navegador.
+        </p>
+      </section>
+
+      <form class="composer" id="composer">
+        <label class="sr-only" for="input">Sua mensagem</label>
+        <textarea
+          id="input"
+          rows="2"
+          placeholder="Carregue o modelo para conversar…"
+          disabled
+        ></textarea>
+        <button type="submit" id="send" disabled>Enviar</button>
+      </form>
+
+      <footer class="foot">
+        <p>
+          Nada sai deste dispositivo: o modelo é baixado uma vez e a inferência
+          roda na sua GPU via WebGPU. O histórico existe apenas em memória e
+          desaparece ao recarregar a página.
+        </p>
+        <p>
+          Modelo <strong>Qwen2.5-0.5B-Instruct</strong> servido pelo
+          <a href="https://github.com/mlc-ai/web-llm" rel="noopener">WebLLM</a>.
+          Versão completa deste experimento:
+          <a
+            href="https://claudneysessa.github.io/in-browser-ai-chat/"
+            rel="noopener"
+            >IAí?</a
+          >. Autoria de Claudney Sarti Sessa —
+          <a
+            href="https://github.com/claudneysessa/pocket-browser-ai"
+            rel="noopener"
+            >código no GitHub</a
+          >.
+        </p>
+      </footer>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
