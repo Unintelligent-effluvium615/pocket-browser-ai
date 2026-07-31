@@ -204,9 +204,11 @@ button.danger:hover:not(:disabled) {
 }
 
 .empty {
-  margin: auto 0;
-  max-width: 46ch;
+  margin: auto;
+  max-width: 42ch;
   color: var(--faint);
+  text-align: center;
+  text-wrap: balance;
   font-size: 0.9rem;
 }
 

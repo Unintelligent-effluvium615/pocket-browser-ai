@@ -11,6 +11,16 @@ account, no build step — three static files.**
 
 **Live demo:** https://claudneysessa.github.io/pocket-browser-ai/
 
+![IA de Bolso with Qwen2.5 0.5B loaded on the GPU, answering a prompt about programming tips entirely offline](./docs/images/pocket-browser-ai-overview.png)
+
+### Real generation, token by token
+
+![Animation of a question being typed and the model streaming its answer word by word inside the browser](./docs/images/demo.gif)
+
+Both captures are unedited output from the 0.5B model running locally. Nothing is
+staged and no response was rewritten — including the parts where a model this
+small shows its limits.
+
 ## What this is
 
 The smallest honest example of local LLM inference on the web. Weights are

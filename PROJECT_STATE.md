@@ -22,11 +22,21 @@
 - **Inferência real confirmada por Claudney em 31/07/2026**, em navegador com
   WebGPU: detecção de suporte, download dos pesos com progresso, geração em
   streaming e destravamento da caixa de texto.
+- Ciclo completo observado em Chrome desktop: cache detectado, modelo carregado
+  do cache em cerca de 19s, resposta transmitida token a token.
+- Responsividade verificada em 1920×1080, 1366×768 e viewport estreito (~500px).
+  Em 1366×768 a área operacional inteira cabe sem rolagem; só o rodapé fica
+  abaixo da dobra, o que o padrão da raiz permite para conteúdo explicativo.
+- Mídia real capturada: `docs/images/pocket-browser-ai-overview.png` (960×1040)
+  e `docs/images/demo.gif` (760×728, 221 quadros, 415 KB), ambas de execução
+  real e sem edição de conteúdo.
+- Publicação verificada: repositório público, Pages verde, URL respondendo HTTP
+  200 e os três arquivos servidos com content-type correto.
 
 ## Não validado ainda
 
-- Responsividade nas quatro larguras exigidas pelo padrão da raiz.
-- Mídia: nenhum screenshot ou GIF capturado.
+- Comportamento em GPUs e navegadores diferentes do ambiente de teste.
+- Primeiro download em origem sem cache (o teste usou o cache já existente).
 
 ## Como validar
 
@@ -39,20 +49,21 @@ npx serve .
 
 ## Último marco
 
-- Commit: inicial (estrutura mínima funcional)
-- Entrega: aplicação estática de três arquivos replicando modelo e parâmetros
-  do IAí?
+- Entrega: publicação completa em 31/07/2026 — aplicação, documentação bilíngue,
+  mídia real, repositório público e GitHub Pages verde.
+- Correções de acabamento aplicadas após inspeção visual: estado vazio passou a
+  acompanhar o modelo carregado, texto vazio centralizado e negrito de markdown
+  renderizado sem parser e sem `innerHTML`.
 
 ## Próximo passo recomendado
 
-- Capturar screenshot e GIF reais e incorporá-los aos dois READMEs.
+- Medir e exibir tokens por segundo reais, por dispositivo.
 
 ## Pendências
 
-- Screenshot e GIF reais, apenas depois de validar a inferência no navegador
-  (`MEDIA_STANDARD.md` proíbe capturar antes de layout e nome fechados).
-- Publicação no GitHub e ativação do Pages.
-- Registro em `PROJECTS.md` e `memory/INDEX.md` do orquestrador.
+- Testar em outras GPUs e navegadores; hoje há evidência de um ambiente só.
+- Avaliar mover a inferência para Web Worker, mantendo a interface responsiva
+  durante a geração.
 
 ## Decisões abertas
 

@@ -11,6 +11,16 @@ conta, sem etapa de build — três arquivos estáticos.**
 
 **Demonstração online:** https://claudneysessa.github.io/pocket-browser-ai/
 
+![IA de Bolso com o Qwen2.5 0.5B carregado na GPU, respondendo a um pedido de dicas de programação totalmente offline](./docs/images/pocket-browser-ai-overview.png)
+
+### Geração real, token a token
+
+![Animação de uma pergunta sendo digitada e o modelo transmitindo a resposta palavra por palavra dentro do navegador](./docs/images/demo.gif)
+
+As duas capturas são saída real e não editada do modelo de 0,5B rodando local.
+Nada foi encenado e nenhuma resposta foi reescrita — inclusive nos trechos em que
+um modelo desse porte mostra seus limites.
+
 ## O que é
 
 O menor exemplo honesto de inferência local de LLM na web. Os pesos são baixados

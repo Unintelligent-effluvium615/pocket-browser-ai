@@ -48,6 +48,14 @@ function setState(state, message) {
   el.input.placeholder = ready
     ? "Pergunte alguma coisa…"
     : "Carregue o modelo para conversar…";
+
+  // O estado vazio precisa acompanhar o modelo: manter "carregue o modelo"
+  // depois de ele estar pronto seria uma instrução contraditória.
+  if (el.empty?.isConnected) {
+    el.empty.textContent = ready
+      ? "Modelo pronto e rodando na sua GPU. Faça a primeira pergunta."
+      : "Carregue o modelo para começar. O download acontece uma única vez e fica no cache deste navegador.";
+  }
 }
 
 function setProgress(fraction) {
@@ -56,11 +64,27 @@ function setProgress(fraction) {
   el.progressBar.style.width = `${percent}%`;
 }
 
+// O modelo responde usando **negrito** de markdown. Em vez de um parser (ou de
+// innerHTML, que abriria espaço para injeção), alterna nós de texto e <strong>.
+function renderText(node, text) {
+  node.textContent = "";
+  text.split("**").forEach((part, index) => {
+    if (!part) return;
+    if (index % 2 === 1) {
+      const strong = document.createElement("strong");
+      strong.textContent = part;
+      node.append(strong);
+    } else {
+      node.append(document.createTextNode(part));
+    }
+  });
+}
+
 function addBubble(role, text = "") {
   el.empty?.remove();
   const bubble = document.createElement("article");
   bubble.className = `bubble ${role}`;
-  bubble.textContent = text;
+  renderText(bubble, text);
   el.log.append(bubble);
   el.log.scrollTop = el.log.scrollHeight;
   return bubble;
@@ -148,7 +172,7 @@ async function send(event) {
     let answer = "";
     for await (const chunk of stream) {
       answer += chunk.choices[0]?.delta?.content ?? "";
-      bubble.textContent = answer;
+      renderText(bubble, answer);
       el.log.scrollTop = el.log.scrollHeight;
     }
 
