@@ -19,11 +19,12 @@
 - Servidor estático local entrega `/`, `/app.js` e `/style.css` com HTTP 200 e
   content-type correto.
 - Zero dependências instaláveis; nenhuma etapa de build.
+- **Inferência real confirmada por Claudney em 31/07/2026**, em navegador com
+  WebGPU: detecção de suporte, download dos pesos com progresso, geração em
+  streaming e destravamento da caixa de texto.
 
 ## Não validado ainda
 
-- **Inferência real.** Baixar os pesos, compilar na GPU e gerar tokens exige um
-  navegador com WebGPU e hardware real. Não foi executado neste ambiente.
 - Responsividade nas quatro larguras exigidas pelo padrão da raiz.
 - Mídia: nenhum screenshot ou GIF capturado.
 
@@ -44,8 +45,7 @@ npx serve .
 
 ## Próximo passo recomendado
 
-- Rodar no Chrome desktop e confirmar o ciclo completo: WebGPU → download →
-  streaming → remoção do modelo.
+- Capturar screenshot e GIF reais e incorporá-los aos dois READMEs.
 
 ## Pendências
 
