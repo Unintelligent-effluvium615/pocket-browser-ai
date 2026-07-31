@@ -11,15 +11,23 @@ conta, sem etapa de build — três arquivos estáticos.**
 
 **Demonstração online:** https://claudneysessa.github.io/pocket-browser-ai/
 
-![IA de Bolso com o Qwen2.5 0.5B carregado na GPU, respondendo a um pedido de dicas de programação totalmente offline](./docs/images/pocket-browser-ai-overview.png)
+![Tela de abertura do IA de Bolso: o nome do modelo, três fatos sobre rodá-lo localmente e um único botão Iniciar](./docs/images/pocket-browser-ai-overview.png)
 
-### Geração real, token a token
+A aplicação abre numa tela que diz o que vai acontecer — os pesos são baixados
+uma única vez, a inferência roda na sua GPU, nada sai do dispositivo — e só então
+oferece **Iniciar**. Disparar um download de centenas de megabytes a partir de um
+botão sem aviso seria hostil.
+
+### Depois a conversa, com o modelo na sua GPU
 
 ![Animação de uma pergunta sendo digitada e o modelo transmitindo a resposta palavra por palavra dentro do navegador](./docs/images/demo.gif)
 
-As duas capturas são saída real e não editada do modelo de 0,5B rodando local.
-Nada foi encenado e nenhuma resposta foi reescrita — inclusive nos trechos em que
-um modelo desse porte mostra seus limites.
+A animação é saída real e não editada do modelo de 0,5B rodando local. Nada foi
+encenado e nenhuma resposta foi reescrita — inclusive nos trechos em que um modelo
+desse porte mostra seus limites.
+
+Remover o modelo volta para a tela de abertura e apaga a conversa. Sem modelo não
+existe chat, então os dois estados permanecem honestos entre si.
 
 ## O que é
 

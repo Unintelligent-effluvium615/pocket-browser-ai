@@ -14,14 +14,15 @@ const TEMPERATURE = 0.7;
 const MAX_TOKENS = 320;
 
 const el = {
-  dot: document.getElementById("dot"),
+  welcome: document.getElementById("welcome"),
+  chat: document.getElementById("chat"),
+  start: document.getElementById("start"),
   status: document.getElementById("status"),
   progress: document.getElementById("progress"),
   progressBar: document.getElementById("progress-bar"),
-  load: document.getElementById("load"),
+  dot: document.getElementById("dot"),
   remove: document.getElementById("remove"),
   log: document.getElementById("log"),
-  empty: document.getElementById("empty"),
   composer: document.getElementById("composer"),
   input: document.getElementById("input"),
   send: document.getElementById("send"),
@@ -30,38 +31,23 @@ const el = {
 let engine = null;
 let generating = false;
 // Histórico apenas em memória: recarregar a página zera a conversa.
-const history = [];
+let history = [];
 
-function setState(state, message) {
-  el.dot.dataset.state = state;
+// Duas telas e uma regra: sem modelo carregado não existe conversa.
+function showView(name) {
+  el.welcome.hidden = name !== "welcome";
+  el.chat.hidden = name !== "chat";
+}
+
+function setStatus(message, { busy = false, blocked = false } = {}) {
   el.status.textContent = message;
-
-  const ready = state === "ready";
-  const busy = state === "downloading";
-
-  el.load.hidden = ready;
-  el.load.disabled = busy || state === "unsupported" || state === "checking";
-  el.load.textContent = busy ? "Carregando…" : "Carregar modelo";
-  el.remove.hidden = !ready;
-  el.input.disabled = !ready;
-  el.send.disabled = !ready;
-  el.input.placeholder = ready
-    ? "Pergunte alguma coisa…"
-    : "Carregue o modelo para conversar…";
-
-  // O estado vazio precisa acompanhar o modelo: manter "carregue o modelo"
-  // depois de ele estar pronto seria uma instrução contraditória.
-  if (el.empty?.isConnected) {
-    el.empty.textContent = ready
-      ? "Modelo pronto e rodando na sua GPU. Faça a primeira pergunta."
-      : "Carregue o modelo para começar. O download acontece uma única vez e fica no cache deste navegador.";
-  }
+  el.start.disabled = busy || blocked;
+  el.start.textContent = busy ? "Baixando…" : "Iniciar";
 }
 
 function setProgress(fraction) {
-  const percent = Math.round(fraction * 100);
   el.progress.hidden = false;
-  el.progressBar.style.width = `${percent}%`;
+  el.progressBar.style.width = `${Math.round(fraction * 100)}%`;
 }
 
 // O modelo responde usando **negrito** de markdown. Em vez de um parser (ou de
@@ -81,7 +67,7 @@ function renderText(node, text) {
 }
 
 function addBubble(role, text = "") {
-  el.empty?.remove();
+  document.getElementById("empty")?.remove();
   const bubble = document.createElement("article");
   bubble.className = `bubble ${role}`;
   renderText(bubble, text);
@@ -93,29 +79,28 @@ function addBubble(role, text = "") {
 // 1. O navegador suporta WebGPU? Sem isso, nada acontece.
 async function check() {
   if (!("gpu" in navigator)) {
-    setState(
-      "unsupported",
-      "Este navegador não expõe WebGPU. Use Chrome ou Edge recentes em desktop.",
+    setStatus(
+      "Este navegador não expõe WebGPU. Use Chrome ou Edge recentes no desktop.",
+      { blocked: true },
     );
     return;
   }
 
   try {
     const cached = await hasModelInCache(MODEL_ID);
-    setState(
-      "idle",
+    setStatus(
       cached
-        ? "Modelo já está no cache deste navegador. Carregar é rápido."
-        : "Primeiro uso baixa alguns megabytes de pesos. Depois fica no cache.",
+        ? "O modelo já está no cache deste navegador. Iniciar é rápido."
+        : "Pronto para começar. O download acontece uma única vez.",
     );
   } catch {
-    setState("idle", "Não foi possível checar o cache. Você ainda pode tentar.");
+    setStatus("Não foi possível checar o cache. Você ainda pode tentar.");
   }
 }
 
-// 2. Baixar os pesos e montar o modelo na GPU.
-async function load() {
-  setState("downloading", "Preparando…");
+// 2. Baixar os pesos, montar o modelo na GPU e abrir a conversa.
+async function start() {
+  setStatus("Preparando…", { busy: true });
   try {
     engine = await CreateMLCEngine(MODEL_ID, {
       initProgressCallback: ({ progress, text }) => {
@@ -124,26 +109,42 @@ async function load() {
       },
     });
     setProgress(1);
-    setState("ready", "Pronto. O modelo está na sua GPU.");
+    showView("chat");
     el.input.focus();
   } catch (error) {
     el.progress.hidden = true;
-    setState(
-      "error",
+    setStatus(
       error instanceof Error ? error.message : "Falha ao carregar o modelo.",
     );
   }
 }
 
-// 3. Devolver o espaço em disco quando o usuário quiser.
+// 3. Devolver o espaço em disco e voltar ao início.
 async function remove() {
-  if (!window.confirm("Remover o modelo deste navegador?")) return;
+  if (
+    !window.confirm(
+      "Remover o modelo deste navegador? A conversa atual também será apagada.",
+    )
+  ) {
+    return;
+  }
+
   await engine?.unload();
   engine = null;
   await deleteModelAllInfoInCache(MODEL_ID);
+
+  history = [];
+  el.log.replaceChildren();
+  const empty = document.createElement("p");
+  empty.className = "empty";
+  empty.id = "empty";
+  empty.textContent = "Modelo pronto. Faça a primeira pergunta.";
+  el.log.append(empty);
+
   el.progress.hidden = true;
   el.progressBar.style.width = "0%";
-  setState("idle", "Modelo removido. Baixe novamente quando quiser.");
+  showView("welcome");
+  setStatus("Modelo removido. Baixe novamente quando quiser.");
 }
 
 // 4. Conversar, com a resposta aparecendo token a token.
@@ -186,12 +187,12 @@ async function send(event) {
   } finally {
     delete bubble.dataset.pending;
     generating = false;
-    el.send.disabled = !engine;
+    el.send.disabled = false;
     el.input.focus();
   }
 }
 
-el.load.addEventListener("click", load);
+el.start.addEventListener("click", start);
 el.remove.addEventListener("click", remove);
 el.composer.addEventListener("submit", send);
 el.input.addEventListener("keydown", (event) => {

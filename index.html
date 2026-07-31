@@ -16,64 +16,81 @@
   </head>
   <body>
     <main class="app">
-      <header class="head">
-        <h1>IA de Bolso</h1>
-        <p class="tagline">
-          Um modelo de linguagem inteiro rodando dentro desta aba. Sem servidor,
-          sem conta, sem etapa de build — três arquivos estáticos.
-        </p>
-      </header>
+      <!-- Tela 1: abertura. Explica o que vai acontecer antes de baixar nada. -->
+      <section class="view welcome" id="welcome">
+        <div class="welcome-inner">
+          <h1>IA de Bolso</h1>
+          <p class="tagline">
+            Um modelo de linguagem inteiro rodando dentro desta aba. Sem
+            servidor, sem conta, sem etapa de build — três arquivos estáticos.
+          </p>
 
-      <section class="model" aria-labelledby="model-heading">
-        <div class="model-id">
-          <span class="dot" id="dot" data-state="checking"></span>
-          <div>
-            <strong id="model-heading">Qwen2.5 0.5B Instruct</strong>
+          <div class="card">
+            <h2>Qwen2.5 0.5B Instruct</h2>
+            <ul class="facts">
+              <li>
+                A inferência acontece na <strong>sua GPU</strong>, via WebGPU.
+                Nada é enviado para nenhum servidor.
+              </li>
+              <li>
+                O primeiro início <strong>baixa os pesos do modelo</strong> —
+                algumas centenas de megabytes — e guarda no cache deste
+                navegador. Das próximas vezes é quase instantâneo.
+              </li>
+              <li>
+                Você pode remover o modelo do navegador a qualquer momento e
+                recuperar o espaço.
+              </li>
+            </ul>
+
+            <button type="button" id="start" disabled>Iniciar</button>
+
+            <div class="progress" id="progress" hidden>
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
             <p class="status" id="status" role="status" aria-live="polite">
               Verificando suporte do navegador…
             </p>
           </div>
         </div>
+      </section>
 
-        <div class="progress" id="progress" hidden>
-          <div class="progress-bar" id="progress-bar"></div>
-        </div>
-
-        <div class="model-actions">
-          <button type="button" id="load" disabled>Carregar modelo</button>
-          <button type="button" id="remove" class="danger" hidden>
+      <!-- Tela 2: conversa. Só existe quando há um modelo carregado. -->
+      <section class="view chat" id="chat" hidden>
+        <header class="bar">
+          <p class="bar-model">
+            <span class="dot" id="dot"></span>
+            <strong>Qwen2.5 0.5B</strong>
+            <span class="bar-note">rodando na sua GPU</span>
+          </p>
+          <button type="button" id="remove" class="danger">
             Remover modelo
           </button>
+        </header>
+
+        <div class="log" id="log" aria-live="polite" aria-label="Conversa">
+          <p class="empty" id="empty">
+            Modelo pronto. Faça a primeira pergunta.
+          </p>
         </div>
-      </section>
 
-      <section class="log" id="log" aria-live="polite" aria-label="Conversa">
-        <p class="empty" id="empty">
-          Carregue o modelo para começar. O download acontece uma única vez e
-          fica no cache deste navegador.
-        </p>
+        <form class="composer" id="composer">
+          <label class="sr-only" for="input">Sua mensagem</label>
+          <textarea
+            id="input"
+            rows="2"
+            placeholder="Pergunte alguma coisa…"
+          ></textarea>
+          <button type="submit" id="send">Enviar</button>
+        </form>
       </section>
-
-      <form class="composer" id="composer">
-        <label class="sr-only" for="input">Sua mensagem</label>
-        <textarea
-          id="input"
-          rows="2"
-          placeholder="Carregue o modelo para conversar…"
-          disabled
-        ></textarea>
-        <button type="submit" id="send" disabled>Enviar</button>
-      </form>
 
       <footer class="foot">
         <p>
-          Nada sai deste dispositivo: o modelo é baixado uma vez e a inferência
-          roda na sua GPU via WebGPU. O histórico existe apenas em memória e
-          desaparece ao recarregar a página.
-        </p>
-        <p>
           Modelo <strong>Qwen2.5-0.5B-Instruct</strong> servido pelo
           <a href="https://github.com/mlc-ai/web-llm" rel="noopener">WebLLM</a>.
+          O histórico existe apenas em memória e desaparece ao recarregar.
           Versão completa deste experimento:
           <a
             href="https://claudneysessa.github.io/in-browser-ai-chat/"

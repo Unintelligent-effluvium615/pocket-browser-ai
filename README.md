@@ -11,15 +11,23 @@ account, no build step — three static files.**
 
 **Live demo:** https://claudneysessa.github.io/pocket-browser-ai/
 
-![IA de Bolso with Qwen2.5 0.5B loaded on the GPU, answering a prompt about programming tips entirely offline](./docs/images/pocket-browser-ai-overview.png)
+![Opening screen of IA de Bolso: the model name, three facts about running it locally, and a single Start button](./docs/images/pocket-browser-ai-overview.png)
 
-### Real generation, token by token
+The app opens on a screen that says what is about to happen — the weights are
+downloaded once, inference runs on your GPU, nothing leaves the device — and only
+then offers **Iniciar**. Firing a several-hundred-megabyte download from an
+unlabelled button would be hostile.
+
+### Then the chat, with the model on your GPU
 
 ![Animation of a question being typed and the model streaming its answer word by word inside the browser](./docs/images/demo.gif)
 
-Both captures are unedited output from the 0.5B model running locally. Nothing is
+The animation is unedited output from the 0.5B model running locally. Nothing is
 staged and no response was rewritten — including the parts where a model this
 small shows its limits.
+
+Removing the model returns to the opening screen and clears the conversation. No
+model means no chat, so the two states stay honest about each other.
 
 ## What this is
 
